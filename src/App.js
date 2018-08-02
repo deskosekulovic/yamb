@@ -67,13 +67,22 @@ class App extends Component {
     handleInput(e){
         const { value, rollCounter, permission, najavljeno, fields, inputCount } = this.state;
         let field = e.target.id.split('-')[1];
+        let column = e.target.id.split('-')[0];
         permissionHandler(e.target.id);
         let input, res={};
-        e.target.id.split('-')[0]==='najava' && rollCounter===1 && this.setState({
+        column==='najava' && rollCounter===1 && this.setState({
             permission: {...permission, per:{[e.target.id]: true}},
             najavljeno: true
         });
-        if(field==='kenta' && e.target.id.split('-')[0]==='najava'){
+        !najavljeno && column==='najava' && rollCounter===3 && this.setState({
+            fields: {...fields, [e.target.id]: 0,...res},
+            permission: {...permission, per:{}},
+            rollCounter: 0,
+            value: [],
+            selected: [false,false,false,false,false,false],
+            inputCount: inputCount+1
+        });
+        if(field==='kenta' && column==='najava'){
             input=calculate(field,value,rollCounter);
             res=columnResult(e.target.id,input);
             input && this.setState({
@@ -99,7 +108,7 @@ class App extends Component {
                 inputCount: inputCount+1
             });
         }
-        if(e.target.id.split('-')[0]!=='najava' && permission.per[e.target.id]){
+        if(column!=='najava' && column!=='rucno' && permission.per[e.target.id]){
             input=calculate(field,value,rollCounter);
             res=columnResult(e.target.id,input);
             this.setState({
@@ -110,6 +119,27 @@ class App extends Component {
                 permission: {...permission, per:{}},
                 inputCount: inputCount+1
             });
+        }
+        if(column==='rucno'){
+            input=calculate(field,value,rollCounter);
+            res=columnResult(e.target.id,input);
+            rollCounter===1 ?
+                this.setState({
+                    fields: {...fields, [e.target.id]: input,...res},
+                    rollCounter: 0,
+                    value: [],
+                    selected: [false,false,false,false,false,false],
+                    permission: {...permission, per:{}},
+                    inputCount: inputCount+1
+                }) :
+                this.setState({
+                    fields: {...fields, [e.target.id]: 0,...res},
+                    rollCounter: 0,
+                    value: [],
+                    selected: [false,false,false,false,false,false],
+                    permission: {...permission, per:{}},
+                    inputCount: inputCount+1
+                });
         }
     }
     resetGame(){

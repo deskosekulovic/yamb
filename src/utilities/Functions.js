@@ -157,12 +157,20 @@ export const totalResult = () => {
 let done = {};
 let doleIndex=0;
 let goreIndex=0;
+let odkrajevaIndex1=0;
+let odkrajevaIndex2=0;
+let odsredineIndex1=6;
+let odsredineIndex2=7;
 
 export const permissionHandler = (field, rolls, najavljeno, reset) => {
     if(reset){
         done = {};
         doleIndex=0;
         goreIndex=0;
+        odkrajevaIndex1=0;
+        odkrajevaIndex2=0;
+        odsredineIndex1=6;
+        odsredineIndex2=7;
     }
     let object={};
     if(field){
@@ -172,25 +180,51 @@ export const permissionHandler = (field, rolls, najavljeno, reset) => {
 
     object={...object, ['dole-'+rowsToSelect[doleIndex]]:true};
     object={...object, ['gore-'+rowsToSelect[rowsToSelect.length-goreIndex-1]]:true};
+    object={...object, ['odkrajeva-'+rowsToSelect[odkrajevaIndex1]]:true, ['odkrajeva-'+rowsToSelect[rowsToSelect.length-odkrajevaIndex2-1]]:true};
+    object={...object, ['odsredine-'+rowsToSelect[rowsToSelect.length-odsredineIndex1-1]]:true, ['odsredine-'+rowsToSelect[odsredineIndex2]]:true};
     if(field && field.split('-')[0]=='dole'){
         doleIndex++;
     }
     if(field && field.split('-')[0]=='gore'){
         goreIndex++;
     }
+    if(field && field.split('-')[0]=='odkrajeva'){
+        rowsToSelect.slice(0,6).map(
+            row=>{
+                row===field.split('-')[1] && odkrajevaIndex1++;
+            }
+        );
+        rowsToSelect.slice(8,13).map(
+            row=>{
+                row===field.split('-')[1] && odkrajevaIndex2++;
+            }
+        );
+    }
+    if(field && field.split('-')[0]=='odsredine'){
+        rowsToSelect.slice(0,7).map(
+            row=>{
+                row===field.split('-')[1] && odsredineIndex1++;
+            }
+        );
+        rowsToSelect.slice(7,12).map(
+            row=>{
+                row===field.split('-')[1] && odsredineIndex2++;
+            }
+        );
+    }
     rowsToSelect.filter(
         row => {
             if(row!==field) return object={...object, ['slobodno-'+row]:true};
         }
     );
-    if(rolls===1){
+    if(rolls===1 || rolls===3){
         rowsToSelect.filter(
             row => {
                 if(row!==field) return object={...object, ['rucno-'+row]:true};
             }
         );
     }
-    if(rolls===1 || najavljeno){
+    if(rolls===1 || rolls===3 || najavljeno){
         rowsToSelect.filter(
             row => {
                 if(row!==field) return object={...object, ['najava-'+row]:true};

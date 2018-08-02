@@ -16,6 +16,8 @@ class Fields extends Component {
                     <StyledField disabled={true}>&uarr;</StyledField>
                     <StyledField disabled={true}>N</StyledField>
                     <StyledField disabled={true}>R</StyledField>
+                    <StyledField disabled={true}>&harr;</StyledField>
+                    <StyledField disabled={true}>&#8597;</StyledField>
                 </ColumnName>
                 {rows.map(row => {
                     return(

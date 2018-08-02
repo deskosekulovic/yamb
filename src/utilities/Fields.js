@@ -1,7 +1,7 @@
 export const rows = ['1','2','3','4','5','6','suma1','max','min','suma2',
     'kenta','triling','full','poker','yumb','suma3'];
 
-export const columns = ['dole','slobodno','gore','najava','rucno'];
+export const columns = ['dole','slobodno','gore','najava','rucno', 'odkrajeva', 'odsredine'];
 
 export const rowsToSelect = ['1','2','3','4','5','6','max','min',
     'kenta','triling','full','poker','yumb'];
