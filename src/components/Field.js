@@ -1,22 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledField } from '../styles/App';
+import { StyledField } from '../styles/StyledField';
 
-const Field = ({ id, value, permission }) => (
+const Field = ({ id, value, permission, row, column, rollCounter, najavljeno, handleInput, handleMouseOver, handleMouseOut }) => (
     <StyledField
         id={id}
-        permission={permission.per && permission.per[id]}
-        disabled={(permission.per!==undefined && !permission.per[id])}
+        row={row}
+        column={column}
+        permission={permission && permission[id]}
+        disabled={(permission!==undefined && !permission[id])}
+        rollCounter={rollCounter}
+        najavljeno={najavljeno}
+        onClick={handleInput}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
     >
-        <b>{value[id]}</b>&nbsp;
+        {value[id]}&nbsp;
     </StyledField>
 );
 
 Field.propTypes = {
     id: PropTypes.string.isRequired,
-    handleInput: PropTypes.func,
     value: PropTypes.object,
-    permission: PropTypes.object
+    permission: PropTypes.object,
+    row: PropTypes.string,
+    rollCounter: PropTypes.number,
+    column: PropTypes.string,
+    najavljeno: PropTypes.bool,
+    handleInput: PropTypes.func,
+    handleMouseOver: PropTypes.func,
+    handleMouseOut: PropTypes.func
 };
 
 export default Field;

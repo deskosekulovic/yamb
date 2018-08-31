@@ -1,8 +1,42 @@
-import { columns, rowsToSelect } from './Fields';
+import { rowsToSelect, columns } from './Fields';
+
+export const decodeHTML = (html) => {
+    let txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+};
+
+export function generateDice(numberOfDice, selected, dice){
+    let diceValue=[];
+    for(let i=0; i<numberOfDice; i++){
+        diceValue[i] = selected[i] ? dice[i] : Math.floor(Math.random()*6+1);
+    }
+}
+
+let mergedColumns=[...columns];
+export function setExtraColumns(rest={}){
+    Object.keys(rest).map(
+        item=>{
+            if(rest[item]){
+                mergedColumns=[...mergedColumns,...[{[item]:item}]];
+            }
+        }
+    );
+    mergedColumns.map(column=>columnResults={...columnResults,[Object.keys(column)+'-suma1']:0,[Object.keys(column)+'-suma2']:0,[Object.keys(column)+'-suma3']:0});
+    mergedColumns.map(column=>bonus={...bonus,[Object.keys(column)+'-suma1']:true});
+    return mergedColumns;
+}
+
+export function selectedDice(numberOfDice){
+    let diceSelected=[];
+    for(let i=0; i<numberOfDice; i++){
+        diceSelected[i] = false;
+    }
+    return diceSelected;
+}
 
 function removeDuplicateUsingSet(arr){
-    let unique_array = Array.from(new Set(arr));
-    return unique_array;
+    return Array.from(new Set(arr));
 }
 
 function countDuplicates(obj, num){
@@ -21,8 +55,9 @@ const elementRepeats = (dice, field) => {
 };
 
 const minMax = (dice, max) => {
-    const minrray=dice.sort((a,b)=>a-b).slice(0, 5);
-    const maxАrray=dice.sort((a,b)=>a-b).slice(1, 6);
+    let diceToSort = [...dice];
+    const minrray=diceToSort.sort((a,b)=>a-b).slice(0, 5);
+    const maxАrray=diceToSort.reverse((a,b)=>a-b).slice(0, 5);
     return max ? maxАrray.reduce(reducer) : minrray.reduce(reducer);
 };
 
@@ -99,7 +134,7 @@ const calculate = (field, dice, rolls) =>{
         return (full(dice)+30) || 0;
     case 'poker':
         return (same(dice, 4)+40) || 0;
-    case 'yumb':
+    case 'yamb':
         return (same(dice, 5)+50) || 0;
     default:
         return 0;
@@ -109,15 +144,15 @@ const calculate = (field, dice, rolls) =>{
 let helper={};
 let columnResults={};
 let bonus={};
-columns.map(column=>columnResults={...columnResults,[column+'-suma1']:0,[column+'-suma2']:0,[column+'-suma3']:0});
-columns.map(column=>bonus={...bonus,[column+'-suma1']:true});
+mergedColumns.map(column=>columnResults={...columnResults,[Object.keys(column)+'-suma1']:0,[Object.keys(column)+'-suma2']:0,[Object.keys(column)+'-suma3']:0});
+mergedColumns.map(column=>bonus={...bonus,[Object.keys(column)+'-suma1']:true});
 export const columnResult = (field, value, reset) => {
     if(reset){
         helper={};
         columnResults={};
         bonus={};
-        columns.map(column=>columnResults={...columnResults,[column+'-suma1']:0,[column+'-suma2']:0,[column+'-suma3']:0});
-        columns.map(column=>bonus={...bonus,[column+'-suma1']:true});
+        mergedColumns.map(column=>columnResults={...columnResults,[Object.keys(column)+'-suma1']:0,[Object.keys(column)+'-suma2']:0,[Object.keys(column)+'-suma3']:0});
+        mergedColumns.map(column=>bonus={...bonus,[Object.keys(column)+'-suma1']:true});
         return;
     }
     let column = field.split('-')[0];
@@ -144,7 +179,7 @@ export const columnResult = (field, value, reset) => {
         }
         columnResults[column+'-suma2']=columnResults[column+'-suma2'] || 0;
     }
-    if(row==='full' || row==='triling' || row==='kenta' || row==='poker' || row==='yumb'){
+    if(row==='full' || row==='triling' || row==='kenta' || row==='poker' || row==='yamb'){
         columnResults[column+'-suma3']+=value;
     }
     return columnResults;
@@ -172,6 +207,7 @@ export const permissionHandler = (field, rolls, najavljeno, reset) => {
         odsredineIndex1=6;
         odsredineIndex2=7;
     }
+
     let object={};
     if(field){
         done={...done, [field]: false};
@@ -180,15 +216,15 @@ export const permissionHandler = (field, rolls, najavljeno, reset) => {
 
     object={...object, ['dole-'+rowsToSelect[doleIndex]]:true};
     object={...object, ['gore-'+rowsToSelect[rowsToSelect.length-goreIndex-1]]:true};
-    object={...object, ['odkrajeva-'+rowsToSelect[odkrajevaIndex1]]:true, ['odkrajeva-'+rowsToSelect[rowsToSelect.length-odkrajevaIndex2-1]]:true};
-    object={...object, ['odsredine-'+rowsToSelect[rowsToSelect.length-odsredineIndex1-1]]:true, ['odsredine-'+rowsToSelect[odsredineIndex2]]:true};
-    if(field && field.split('-')[0]=='dole'){
+    object={...object, ['krajevi-'+rowsToSelect[odkrajevaIndex1]]:true, ['krajevi-'+rowsToSelect[rowsToSelect.length-odkrajevaIndex2-1]]:true};
+    object={...object, ['sredina-'+rowsToSelect[rowsToSelect.length-odsredineIndex1-1]]:true, ['sredina-'+rowsToSelect[odsredineIndex2]]:true};
+    if(field && field.split('-')[0]==='dole'){
         doleIndex++;
     }
-    if(field && field.split('-')[0]=='gore'){
+    if(field && field.split('-')[0]==='gore'){
         goreIndex++;
     }
-    if(field && field.split('-')[0]=='odkrajeva'){
+    if(field && field.split('-')[0]==='krajevi'){
         rowsToSelect.slice(0,6).map(
             row=>{
                 row===field.split('-')[1] && odkrajevaIndex1++;
@@ -200,7 +236,7 @@ export const permissionHandler = (field, rolls, najavljeno, reset) => {
             }
         );
     }
-    if(field && field.split('-')[0]=='odsredine'){
+    if(field && field.split('-')[0]==='sredina'){
         rowsToSelect.slice(0,7).map(
             row=>{
                 row===field.split('-')[1] && odsredineIndex1++;
@@ -217,14 +253,14 @@ export const permissionHandler = (field, rolls, najavljeno, reset) => {
             if(row!==field) return object={...object, ['slobodno-'+row]:true};
         }
     );
-    if(rolls===1 || rolls===3){
+    if(rolls===1){
         rowsToSelect.filter(
             row => {
                 if(row!==field) return object={...object, ['rucno-'+row]:true};
             }
         );
     }
-    if(rolls===1 || rolls===3 || najavljeno){
+    if(rolls===1 || najavljeno){
         rowsToSelect.filter(
             row => {
                 if(row!==field) return object={...object, ['najava-'+row]:true};

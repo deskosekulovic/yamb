@@ -1,41 +1,42 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dice from './Dice';
-import { dices } from '../utilities/Fields';
+import { setOfDice } from '../utilities/Fields';
 import StyledSetOfDice from '../styles/StyledSetOfDice';
 import Button from '../styles/Button';
 
 class SetOfDices extends Component{
     render(){
-        const { rollDices, value, toggleSelectDice, rollCounter, selected } = this.props;
+        const { rollDice, dice, toggleSelectDice, rollCounter, selected, numberOfDice } = this.props;
         return(
             <StyledSetOfDice>
-                {dices.map((dice,i) =>
+                {setOfDice.slice(0,numberOfDice).map((el,i) =>
                     <Dice
-                        key={dice}
-                        name={dice}
+                        key={el}
+                        name={el}
                         rollCounter={rollCounter}
                         toggleSelectDice={toggleSelectDice}
                         selected={selected[i]}
-                        value={value[i]}
+                        dice={dice[i]}
                     />)}
                 <Button
                     type="button"
-                    onClick={rollDices}
+                    onClick={rollDice}
                     disabled={rollCounter===3 && true}
                 >
-                Baci kocke!
+                    {rollCounter ? rollCounter+'. bacanje' : 'Baci kocke!'}
                 </Button>
             </StyledSetOfDice>
         );
     }
 }
 SetOfDices.propTypes = {
-    value: PropTypes.array.isRequired,
-    rollDices: PropTypes.func.isRequired,
+    dice: PropTypes.array.isRequired,
+    rollDice: PropTypes.func.isRequired,
     toggleSelectDice: PropTypes.func.isRequired,
     rollCounter: PropTypes.number.isRequired,
-    selected: PropTypes.array.isRequired
+    selected: PropTypes.array,
+    numberOfDice: PropTypes.string
 };
 
 export default SetOfDices;

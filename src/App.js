@@ -1,186 +1,51 @@
 import React, { Component } from 'react';
-import { StyledApp, Game, Span, Rezultati, theme } from './styles/App';
+import { Switch, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import calculate, { permissionHandler, columnResult, totalResult } from './utilities/Functions';
-import Fields from './components/Fields';
-import SetOfDice from './components/SetOfDice';
+import { theme } from './styles/App';
+import Main from './components/Main';
+import Settings from './components/Settings';
 import TopList from './components/TopList';
+import { setExtraColumns } from './utilities/Functions';
+import { getDataSettings } from './utilities/store';
 import { columns, rowsToSelect } from './utilities/Fields';
 
 class App extends Component {
     constructor(props){
         super(props);
+        let dataSettings = getDataSettings();
         this.state = {
-            value: [],
-            selected: [false,false,false,false,false,false],
-            rollCounter: 0,
-            fields: {},
-            permission: {},
-            najavljeno: false,
-            inputCount: 0
+            numberOfDice: dataSettings['numberOfDice'] || '6'
         };
-        this.rollDices = this.rollDices.bind(this);
-        this.toggleSelectDice = this.toggleSelectDice.bind(this);
-        this.handleInput=this.handleInput.bind(this);
-        this.resetGame=this.resetGame.bind(this);
+        this.handleChange=this.handleChange.bind(this);
     }
-    componentDidMount() {
-        const { permission } = this.state;
+    componentDidMount(){
+        let dataSettings = getDataSettings();
+        let rest = dataSettings['columnsToAdd'];
+        this.setState({...rest});
+        setExtraColumns({...rest});
+    }
+    handleChange(e){
+        const target = e.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
         this.setState({
-            permission: {...permission, per:{}}
+            [name]: value,
         });
-    }
-    componentDidUpdate(prevProps, prevState) {
-        const { rollCounter, permission, najavljeno } = this.state;
-        let per;
-        if(prevState.rollCounter!==rollCounter && rollCounter){
-            if(!najavljeno){
-                per=permissionHandler(null, rollCounter, null, null);
-                this.setState({
-                    permission: {...permission, per}
-                });
-            }
-        }
-    }
-    rollDices(){
-        const { selected, value, rollCounter } = this.state;
-        let val1 = selected[0] ? value[0] : Math.floor(Math.random()*6+1);
-        let val2 = selected[1] ? value[1] : Math.floor(Math.random()*6+1);
-        let val3 = selected[2] ? value[2] : Math.floor(Math.random()*6+1);
-        let val4 = selected[3] ? value[3] : Math.floor(Math.random()*6+1);
-        let val5 = selected[4] ? value[4] : Math.floor(Math.random()*6+1);
-        let val6 = selected[5] ? value[5] : Math.floor(Math.random()*6+1);
-
-        this.setState({
-            value: [val1,val2,val3,val4,val5,val6],
-            rollCounter: rollCounter + 1
-        });
-    }
-    toggleSelectDice(e){
-        let index=e.target.name.split('-')[1]-1;
-        this.setState({
-            selected: this.state.selected.map((el,i)=>{
-                return i===index ? !el : el;
-            })
-        });
-    }
-    handleInput(e){
-        const { value, rollCounter, permission, najavljeno, fields, inputCount } = this.state;
-        let field = e.target.id.split('-')[1];
-        let column = e.target.id.split('-')[0];
-        permissionHandler(e.target.id);
-        let input, res={};
-        column==='najava' && rollCounter===1 && this.setState({
-            permission: {...permission, per:{[e.target.id]: true}},
-            najavljeno: true
-        });
-        !najavljeno && column==='najava' && rollCounter===3 && this.setState({
-            fields: {...fields, [e.target.id]: 0,...res},
-            permission: {...permission, per:{}},
-            rollCounter: 0,
-            value: [],
-            selected: [false,false,false,false,false,false],
-            inputCount: inputCount+1
-        });
-        if(field==='kenta' && column==='najava'){
-            input=calculate(field,value,rollCounter);
-            res=columnResult(e.target.id,input);
-            input && this.setState({
-                fields: {...fields, [e.target.id]: input,...res},
-                rollCounter: 0,
-                value: [],
-                selected: [false,false,false,false,false,false],
-                permission: {...permission, per:{}},
-                najavljeno: false,
-                inputCount: inputCount+1
-            });
-        }
-        if(najavljeno && rollCounter===3){
-            input=calculate(field,value,rollCounter);
-            res=columnResult(e.target.id,input);
-            this.setState({
-                fields: {...fields, [e.target.id]: input,...res},
-                rollCounter: 0,
-                value: [],
-                selected: [false,false,false,false,false,false],
-                permission: {...permission, per:{}},
-                najavljeno: false,
-                inputCount: inputCount+1
-            });
-        }
-        if(column!=='najava' && column!=='rucno' && permission.per[e.target.id]){
-            input=calculate(field,value,rollCounter);
-            res=columnResult(e.target.id,input);
-            this.setState({
-                fields: {...fields, [e.target.id]: input,...res},
-                rollCounter: 0,
-                value: [],
-                selected: [false,false,false,false,false,false],
-                permission: {...permission, per:{}},
-                inputCount: inputCount+1
-            });
-        }
-        if(column==='rucno'){
-            input=calculate(field,value,rollCounter);
-            res=columnResult(e.target.id,input);
-            rollCounter===1 ?
-                this.setState({
-                    fields: {...fields, [e.target.id]: input,...res},
-                    rollCounter: 0,
-                    value: [],
-                    selected: [false,false,false,false,false,false],
-                    permission: {...permission, per:{}},
-                    inputCount: inputCount+1
-                }) :
-                this.setState({
-                    fields: {...fields, [e.target.id]: 0,...res},
-                    rollCounter: 0,
-                    value: [],
-                    selected: [false,false,false,false,false,false],
-                    permission: {...permission, per:{}},
-                    inputCount: inputCount+1
-                });
-        }
-    }
-    resetGame(){
-        this.setState({
-            value: [],
-            selected: [false,false,false,false,false,false],
-            rollCounter: 0,
-            fields: {},
-            permission: {},
-            najavljeno: false,
-            inputCount: 0
-        });
-        permissionHandler(null, null, null, true);
-        columnResult(null, null, true);
     }
     render() {
-        const { value, rollCounter, selected, fields, permission, inputCount } = this.state;
-        const numberOfFields = columns.length*rowsToSelect.length;
+        const { numberOfDice, ...rest } = this.state;
+        let bonusLength = 0;
+        Object.keys(rest).map(item=>{
+            rest[item] && bonusLength++;
+        });
+        const numberOfFields = (columns.length+bonusLength)*rowsToSelect.length;
         return (
             <ThemeProvider theme={theme}>
-                <StyledApp>
-                    <Game>
-                        <Span onClick={this.resetGame}><b>Nova igra</b></Span>
-                        <Fields
-                            fields={fields}
-                            handleInput={this.handleInput}
-                            permission={permission}
-                        />
-                        <SetOfDice
-                            rollDices={this.rollDices}
-                            toggleSelectDice={this.toggleSelectDice}
-                            selected={selected}
-                            rollCounter={rollCounter}
-                            value={value}
-                        />
-                    </Game>
-                    <Rezultati>
-                        <h1>Rezultat: {totalResult()}</h1>
-                        {numberOfFields===inputCount && <TopList totalResult={totalResult()} />}
-                    </Rezultati>
-                </StyledApp>
+                <Switch>
+                    <Route exact path="/" render={props=><Main {...props} columnsToAdd={rest} numberOfColumns={columns.length+bonusLength} numberOfDice={numberOfDice} numberOfFields={numberOfFields} />} />
+                    <Route path="/settings" render={props=><Settings {...props} columnsToAdd={rest} numberOfDice={numberOfDice} handleChange={this.handleChange} />} />
+                    <Route path="/toplists" render={props=><TopList {...props} numberOfColumns={columns.length+bonusLength} columnsToAdd={rest} numberOfDice={numberOfDice} />} />
+                </Switch>
             </ThemeProvider>
         );
     }
