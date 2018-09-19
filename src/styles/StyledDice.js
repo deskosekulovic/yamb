@@ -5,7 +5,6 @@ const StyledDice = styled.input`
   height: 50px;
   font-weight: bold;
   font-size: 20px;
-  text-align: center;
   background-color: ${(props) => props.selected ? props.theme.selectColor : 'none'};
   &:hover {
     cursor: ${(props) => props.theme.pointer};

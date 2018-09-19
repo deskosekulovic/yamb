@@ -6,9 +6,6 @@ import { rows, columns } from '../utilities/Fields';
 import { decodeHTML } from '../utilities/Functions';
 
 class Fields extends Component {
-    constructor(props){
-        super(props);
-    }
     render(){
         const { handleInput, fields, permission, rollCounter, najavljeno, handleMouseOver, handleMouseOut } = this.props;
         let { columnsToAdd } = this.props;
@@ -22,7 +19,7 @@ class Fields extends Component {
             }
         );
         return(
-            <div>
+            <div style={{'gridArea': 'field'}}>
                 <ColumnName>
                     <StyledField row={'columnName'} disabled={true}>&nbsp;</StyledField>
                     {mergedColumns.map((column,i) =>

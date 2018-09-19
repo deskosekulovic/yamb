@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { StyledApp, Game, Span, Rezultati } from '../styles/App';
+import { StyledApp, Game, Span, Results, Navigation } from '../styles/App';
 import calculate, { permissionHandler, columnResult, totalResult, selectedDice } from '../utilities/Functions';
 import Fields from './Fields';
 import SetOfDice from './SetOfDice';
-import TopList from './TopList';
+import Button from './Button';
+import { saveData } from '../utilities/store';
 
 class Main extends Component {
     constructor(props){
@@ -128,13 +129,20 @@ class Main extends Component {
     }
     render() {
         const { dice, rollCounter, selected, fields, permission, inputCount, najavljeno } = this.state;
-        const { numberOfDice, columnsToAdd, numberOfFields, numberOfColumns, match } = this.props;
+        const { numberOfDice, columnsToAdd, numberOfFields, numberOfColumns } = this.props;
+        if(inputCount===numberOfFields){
+            let name=prompt('Unesite ime', '').trim();
+            name = name.length>0 ? name : 'Neznani junak';
+            saveData(name,totalResult(), numberOfDice, numberOfColumns);
+        }
         return (
             <StyledApp>
                 <Game>
-                    <Span onClick={this.resetGame}><b>Nova igra</b></Span>
-                    <Link to='/settings' style={{'color':'black','paddingLeft':'10px'}}><b>Podešavanja</b></Link>
-                    <Link to='/toplists' style={{'color':'black','paddingLeft':'10px'}}><b>Top Liste</b></Link>
+                    <Navigation>
+                        <Span onClick={this.resetGame}><b>Nova igra</b></Span>
+                        <Link to='/settings' style={{'color':'black','paddingLeft':'10px'}}><b>Podešavanja</b></Link>
+                        <Link to='/toplists' style={{'color':'black','paddingLeft':'10px'}}><b>Top Liste</b></Link>
+                    </Navigation>
                     <Fields
                         fields={fields}
                         columnsToAdd={columnsToAdd}
@@ -145,24 +153,22 @@ class Main extends Component {
                         rollCounter={rollCounter}
                         najavljeno={najavljeno}
                     />
-                    {numberOfFields!==inputCount && <SetOfDice
-                        rollDice={this.rollDice}
+                    <SetOfDice
                         toggleSelectDice={this.toggleSelectDice}
                         selected={selected}
                         rollCounter={rollCounter}
                         dice={dice}
                         numberOfDice={numberOfDice}
-                    />}
+                    />
+                    <Button
+                        rollDice={this.rollDice}
+                        rollCounter={rollCounter}
+                        disabled={numberOfFields===inputCount && true}
+                    />
                 </Game>
-                <Rezultati>
+                <Results>
                     {totalResult()!==0 && <h1>Rezultat: {totalResult()}</h1>}
-                    {inputCount===numberOfFields && <TopList
-                        match={match}
-                        numberOfDice={numberOfDice}
-                        numberOfColumns={numberOfColumns}
-                        totalResult={totalResult()}
-                    />}
-                </Rezultati>
+                </Results>
             </StyledApp>
         );
     }

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StyledSetOfDice = styled.div`
-  margin: 20px;
+  grid-area: dice;
 `;
 
 export default StyledSetOfDice;

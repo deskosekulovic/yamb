@@ -1,21 +1,32 @@
 import styled from 'styled-components';
 
 const StyledTopList = styled.div`
-  margin: ${(props) => props.center && props.theme.centering};
+  text-align: center;
   background-color: ${(props) => props.theme.gameBackground};
-  width: ${(props) => props.center && '40%'};
-  min-width: 500px;
-  min-height: 300px;
-  padding: 10px;
 `;
-export const TopListSettings = styled.div`
-  float: left;
-  padding-right: 50px;
+export const StyledTopListSettings = styled.div`
+  position: absolute;
+  width: 100%;
+`;
+
+export const Settings = styled.div`
+  background: ${(props) => props.theme.backgroundColor};
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const StyledDisplayTopList = styled.div`
+  padding-top: 60px;
+  padding-bottom: 20px;
 `;
 
 export const Table = styled.table`
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin: 20px auto;
   th, td {
     border: ${(props) => props.theme.border};
     border-collapse: collapse;

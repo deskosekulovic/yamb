@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider, injectGlobal } from 'styled-components';
 import { theme } from './styles/App';
 import Main from './components/Main';
 import Settings from './components/Settings';
@@ -50,5 +50,15 @@ class App extends Component {
         );
     }
 }
+
+injectGlobal`
+  * {
+    margin: 0px;
+    padding: 0px;
+  }
+  body {
+    background-color: #DCDCDC;
+  }
+`;
 
 export default App;

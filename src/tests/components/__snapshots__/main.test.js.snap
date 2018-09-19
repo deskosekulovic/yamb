@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+.c0 {
+  float: left;
+  padding: 5px 30px;
+  background-color: #DCDCDC;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[` 2`] = `
+.c0 {
+  padding: 20px;
+  background-color: #DCDCDC;
+  height: 630px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`Main should match snapshot 1`] = `
+<styled.div>
+  <styled.div>
+    <styled.span
+      onClick={[Function]}
+    >
+      <b>
+        Nova igra
+      </b>
+    </styled.span>
+    <Link
+      replace={false}
+      style={
+        Object {
+          "color": "black",
+          "paddingLeft": "10px",
+        }
+      }
+      to="/settings"
+    >
+      <b>
+        Podešavanja
+      </b>
+    </Link>
+    <Link
+      replace={false}
+      style={
+        Object {
+          "color": "black",
+          "paddingLeft": "10px",
+        }
+      }
+      to="/toplists"
+    >
+      <b>
+        Top Liste
+      </b>
+    </Link>
+    <Fields
+      fields={Object {}}
+      handleInput={[Function]}
+      handleMouseOut={[Function]}
+      handleMouseOver={[Function]}
+      najavljeno={false}
+      permission={Object {}}
+      rollCounter={0}
+    />
+    <SetOfDices
+      dice={Array []}
+      rollCounter={0}
+      rollDice={[Function]}
+      selected={Array []}
+      toggleSelectDice={[Function]}
+    />
+  </styled.div>
+  <styled.div />
+</styled.div>
+`;

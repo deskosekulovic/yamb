@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const ColumnName = styled.div`
   font-weight: bold;
-  margin-top: 20px;
   background-color: ${(props) => props.test==='true' && props.theme.rowsColor};
 `;
 

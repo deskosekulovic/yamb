@@ -1,20 +1,24 @@
 import styled from 'styled-components';
 
 export const StyledSettings = styled.div`
-  margin: 0 auto;
-  width: 600px;
+  display: grid;
+  grid-template-columns: 1fr 480px 1fr;
+  grid-row-gap: 1em;
+  h1,div,a{
+    grid-column: 2/3;
+    display: grid;
+    justify-content: center;
+    text-decoration: none;
+    h2,select{
+      justify-self: center;
+    }
+  }
   background-color: ${(props) => props.theme.backgroundColor};
-  padding: 30px;
-  text-align: center;
+  padding: 20px 0;
 `;
 
 export const Container = styled.label`
-  display: block;
-  position: relative;
-  padding-left: 250px;
-  margin-bottom: 12px;
   cursor: pointer;
   font-size: 22px;
-  user-select: none;
-  text-align: left;
+  padding-left: 30px;
 `;
