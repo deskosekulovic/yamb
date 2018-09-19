@@ -12,7 +12,7 @@ import { columns, rowsToSelect } from './utilities/Fields';
 class App extends Component {
     constructor(props){
         super(props);
-        let dataSettings = getDataSettings();
+        let dataSettings = getDataSettings('dataSettings');
         this.state = {
             numberOfDice: dataSettings['numberOfDice'] || '6'
         };

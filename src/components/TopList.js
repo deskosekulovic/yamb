@@ -5,15 +5,17 @@ import { Link } from 'react-router-dom';
 import TopListSettings from './TopListSettings';
 import DisplayTopList from './DisplayTopList';
 import Button from '../styles/Button';
+import { saveTopListSettings, getDataSettings } from '../utilities/store';
 
 class TopList extends Component{
     constructor(props){
         super(props);
+        let dataSettings = getDataSettings('topListSettings');
         this.state={
             data:{},
-            localNumberOfDice: '6',
-            localNumberOfColumns: '7',
-            numberOfResults: '10',
+            localNumberOfDice: dataSettings['localNumberOfDice'] || '6',
+            localNumberOfColumns: dataSettings['localNumberOfColumns'] || '7',
+            numberOfResults: dataSettings['numberOfResults'] || '10',
             showTopListSettings: false
         };
         this.handleChange=this.handleChange.bind(this);
@@ -24,6 +26,7 @@ class TopList extends Component{
         const target = e.target;
         const name = target.name;
         const value = target.value;
+        saveTopListSettings(name, value);
         this.setState({
             [name]: value
         });

@@ -11,7 +11,12 @@ export const saveSettings = (numberOfDice, rest) => {
     localStorage.setItem('data', JSON.stringify(data));
 };
 
-export const getDataSettings = () => {
+export const saveTopListSettings = (name, value) => {
+    data = {...data, ['topListSettings']:{...data['topListSettings'],[name]:value}};
+    localStorage.setItem('data', JSON.stringify(data));
+};
+
+export const getDataSettings = type => {
     let data = JSON.parse(localStorage.getItem('data')) || {};
-    return data['dataSettings'] || {};
+    return data[type] || {};
 };
