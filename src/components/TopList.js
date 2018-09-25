@@ -7,6 +7,7 @@ import DisplayTopList from './DisplayTopList';
 import Button from '../styles/Button';
 import { saveTopListSettings, getDataSettings } from '../utilities/store';
 
+
 class TopList extends Component{
     constructor(props){
         super(props);
@@ -37,7 +38,7 @@ class TopList extends Component{
     }
     render(){
         const { localNumberOfDice, localNumberOfColumns, numberOfResults, showTopListSettings } = this.state;
-
+        const data = getDataSettings(localNumberOfDice)[localNumberOfColumns];
         return(
             <StyledTopList>
                 <TopListSettings
@@ -52,6 +53,7 @@ class TopList extends Component{
                     localNumberOfDice={localNumberOfDice}
                     localNumberOfColumns={localNumberOfColumns}
                     numberOfResults={numberOfResults}
+                    data={data}
                 />
                 <Link to='/'><Button>Nazad</Button></Link>
             </StyledTopList>
