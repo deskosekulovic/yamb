@@ -1,66 +1,44 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { RowName, ColumnName, StyledField } from '../styles/StyledField';
 import Field from './Field';
-import { rows, columns } from '../utilities/Fields';
+import { rows } from '../utilities/Fields';
 import { decodeHTML } from '../utilities/Functions';
 
-class Fields extends Component {
-    render(){
-        const { handleInput, fields, permission, rollCounter, najavljeno, handleMouseOver, handleMouseOut } = this.props;
-        let { columnsToAdd } = this.props;
-        let extraColumns=Object.keys(columnsToAdd);
-        let mergedColumns=[...columns];
-        extraColumns.map(
-            item=>{
-                if(columnsToAdd[item]){
-                    mergedColumns=[...mergedColumns,...[{[item]:item=='rucno'?'R':item}]];
-                }
-            }
-        );
-        return(
-            <div style={{'gridArea': 'field'}}>
-                <ColumnName>
-                    <StyledField row={'columnName'} disabled={true}>&nbsp;</StyledField>
-                    {mergedColumns.map((column,i) =>
-                        <StyledField
-                            key={i}
-                            disabled={true}
-                            row={'columnName'}
-                        >{decodeHTML(Object.values(column))}</StyledField>
+const Fields = ({
+    handleInput,
+    fields,
+    permission,
+    rollCounter,
+    najavljeno,
+    handleMouseOver,
+    handleMouseOut,
+    columns
+}) =>
+    <div style={{'gridArea': 'field'}}>
+        {rows.map(row => {
+            const rowLabel = row.slice(0,4)==='suma' ? decodeHTML('&sum;') : row;
+            return(
+                <div key={row} id={row}>
+                    {columns.map(column =>
+                        <Field
+                            key={Object.keys(column)}
+                            id={`${Object.keys(column)}-${row}`}
+                            row={row}
+                            column={Object.keys(column)[0]}
+                            label={decodeHTML(Object.values(column)[0]) || rowLabel}
+                            value={fields}
+                            permission={permission}
+                            rollCounter={rollCounter}
+                            najavljeno={najavljeno}
+                            handleInput={handleInput}
+                            handleMouseOver={handleMouseOver}
+                            handleMouseOut={handleMouseOut}
+                        />
                     )}
-                </ColumnName>
-                {rows.map(row => {
-                    return(
-                        <div key={row} id={row}>
-                            <RowName
-                                row={row}
-                                disabled={true}
-                            >
-                                {row.slice(0,4)==='suma' ? decodeHTML('&sum;') : row}
-                            </RowName>
-                            {mergedColumns.map(column =>
-                                <Field
-                                    key={Object.keys(column)}
-                                    id={`${Object.keys(column)}-${row}`}
-                                    row={row}
-                                    column={Object.keys(column)[0]}
-                                    value={fields}
-                                    permission={permission}
-                                    rollCounter={rollCounter}
-                                    najavljeno={najavljeno}
-                                    handleInput={handleInput}
-                                    handleMouseOver={handleMouseOver}
-                                    handleMouseOut={handleMouseOut}
-                                />
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    }
-}
+                </div>
+            );
+        })}
+    </div>;
 
 Fields.propTypes = {
     handleInput: PropTypes.func,
@@ -68,7 +46,7 @@ Fields.propTypes = {
     handleMouseOut: PropTypes.func,
     fields: PropTypes.object,
     permission: PropTypes.object,
-    columnsToAdd: PropTypes.object,
+    columns: PropTypes.array,
     rollCounter: PropTypes.number,
     najavljeno: PropTypes.bool
 };

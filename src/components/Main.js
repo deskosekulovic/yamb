@@ -129,12 +129,21 @@ class Main extends Component {
     }
     render() {
         const { dice, rollCounter, selected, fields, permission, inputCount, najavljeno } = this.state;
-        const { numberOfDice, columnsToAdd, numberOfFields, numberOfColumns } = this.props;
-        if(inputCount===numberOfFields){
+        const { numberOfDice, columnsToAdd, numberOfFields, numberOfColumns, columns } = this.props;
+        if(inputCount===numberOfFields) {
             let name=prompt('Unesite ime', '').trim();
-            name = name.length>0 ? name : 'Neznani junak';
-            saveData(name,totalResult(), numberOfDice, numberOfColumns);
+            name = name.length > 0 ? name : 'Neznani junak';
+            saveData(name, totalResult(), numberOfDice, numberOfColumns);
         }
+        let extraColumns = Object.keys(columnsToAdd);
+        let mergedColumns = [...columns];
+        extraColumns.map(
+            item=>{
+                if(columnsToAdd[item]){
+                    mergedColumns=[...mergedColumns,...[{[item]: item=='rucno' ?' R' : item}]];
+                }
+            }
+        );
         return (
             <StyledApp>
                 <Game>
@@ -145,7 +154,7 @@ class Main extends Component {
                     </Navigation>
                     <Fields
                         fields={fields}
-                        columnsToAdd={columnsToAdd}
+                        columns={mergedColumns}
                         handleInput={this.handleInput}
                         handleMouseOver={this.handleMouseOver}
                         handleMouseOut={this.handleMouseOut}
@@ -163,7 +172,7 @@ class Main extends Component {
                     <Button
                         rollDice={this.rollDice}
                         rollCounter={rollCounter}
-                        disabled={numberOfFields===inputCount && true}
+                        disabled={numberOfFields===inputCount}
                     />
                 </Game>
                 <Results>
@@ -177,6 +186,7 @@ class Main extends Component {
 Main.propTypes={
     numberOfDice: PropTypes.string,
     columnsToAdd: PropTypes.object,
+    columns: PropTypes.array,
     numberOfFields: PropTypes.number,
     numberOfColumns: PropTypes.number,
     match: PropTypes.object

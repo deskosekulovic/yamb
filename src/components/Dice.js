@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StyledDice from '../styles/StyledDice';
 
-const Dice = ({ dice, name, toggleSelectDice, rollCounter, selected }) => (
+const Dice = ({ dice, name, toggleSelectDice, rollCounter, selected }) =>
     <StyledDice
         type='button'
         selected={selected}
@@ -10,8 +10,7 @@ const Dice = ({ dice, name, toggleSelectDice, rollCounter, selected }) => (
         onClick={toggleSelectDice}
         name={name}
         value={dice || 'roll'}
-    />
-);
+    />;
 
 Dice.propTypes = {
     dice: PropTypes.oneOfType([

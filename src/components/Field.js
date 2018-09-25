@@ -2,7 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledField } from '../styles/StyledField';
 
-const Field = ({ id, value, permission, row, column, rollCounter, najavljeno, handleInput, handleMouseOver, handleMouseOut }) => (
+const Field = ({
+    id,
+    value,
+    permission,
+    row,
+    column,
+    label,
+    rollCounter,
+    najavljeno,
+    handleInput,
+    handleMouseOver,
+    handleMouseOut
+}) =>
     <StyledField
         id={id}
         row={row}
@@ -15,15 +27,15 @@ const Field = ({ id, value, permission, row, column, rollCounter, najavljeno, ha
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
     >
-        {value[id]}&nbsp;
-    </StyledField>
-);
+        {(row==='' || column==='rowName') ? label : value[id]}&nbsp;
+    </StyledField>;
 
 Field.propTypes = {
     id: PropTypes.string.isRequired,
     value: PropTypes.object,
     permission: PropTypes.object,
     row: PropTypes.string,
+    label: PropTypes.string,
     rollCounter: PropTypes.number,
     column: PropTypes.string,
     najavljeno: PropTypes.bool,

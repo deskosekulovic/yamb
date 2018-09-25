@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Form = ({ array, name, value, handleChange }) => (
+const Form = ({ array, name, value, handleChange }) =>
     <form>
         {array.map(i=>{
             return (
@@ -17,8 +17,7 @@ const Form = ({ array, name, value, handleChange }) => (
                 </label>
             );
         })}
-    </form>
-);
+    </form>;
 
 Form.propTypes={
     array: PropTypes.array,

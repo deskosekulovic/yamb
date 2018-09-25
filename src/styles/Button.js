@@ -5,7 +5,7 @@ const StyledButton = styled.button`
   height: 50px;
   width: 90px;
   color: ${(props) => props.theme.color};
-  background-color: ${(props) => props.theme.backgroundColor};
+  background-color: ${(props) => props.disabled ? 'red' : props.theme.backgroundColor};
   &:hover {
     cursor: ${(props) => props.theme.pointer};
   }
