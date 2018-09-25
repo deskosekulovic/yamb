@@ -32,8 +32,8 @@ class Main extends Component {
         window.scrollTo(0, 0);
     }
     componentDidUpdate(prevProps, prevState) {
-        const { rollCounter, najavljeno } = this.state;
-        const { columnsToAdd } = this.props;
+        const { rollCounter, najavljeno, inputCount } = this.state;
+        const { columnsToAdd, numberOfFields, numberOfDice, numberOfColumns } = this.props;
         let per=permissionHandler(null, rollCounter);
         if((prevState.rollCounter!==rollCounter && rollCounter) || (prevState.najavljeno!==najavljeno && rollCounter)){
             this.najavaAndRucno = 0;
@@ -43,6 +43,11 @@ class Main extends Component {
             if(!najavljeno){
                 this.setState({permission: {...per}});
             }
+        }
+        if(inputCount===numberOfFields) {
+            let name = prompt('Unesite ime', '');
+            name = name && name.trim().length > 0 ? name : 'Neznani junak';
+            saveData(name, totalResult(), numberOfDice, numberOfColumns);
         }
     }
     rollDice(){
@@ -129,12 +134,8 @@ class Main extends Component {
     }
     render() {
         const { dice, rollCounter, selected, fields, permission, inputCount, najavljeno } = this.state;
-        const { numberOfDice, columnsToAdd, numberOfFields, numberOfColumns, columns } = this.props;
-        if(inputCount===numberOfFields) {
-            let name=prompt('Unesite ime', '').trim();
-            name = name.length > 0 ? name : 'Neznani junak';
-            saveData(name, totalResult(), numberOfDice, numberOfColumns);
-        }
+        const { numberOfDice, columnsToAdd, numberOfFields, columns } = this.props;
+
         let extraColumns = Object.keys(columnsToAdd);
         let mergedColumns = [...columns];
         extraColumns.map(
