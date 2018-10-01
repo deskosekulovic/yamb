@@ -12,73 +12,78 @@ import { columns, rowsToSelect } from './utilities/Fields';
 const dataSettings = getDataSettings('dataSettings');
 
 class App extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            numberOfDice: dataSettings['numberOfDice'] || '6'
-        };
-        this.handleChange=this.handleChange.bind(this);
-    }
-    componentDidMount() {
-        const rest = dataSettings['columnsToAdd'];
-        this.setState({...rest});
-        setExtraColumns({...rest});
-    }
-    handleChange(e) {
-        const target = e.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({
-            [name]: value,
-        });
-    }
-    render() {
-        const { numberOfDice, ...rest } = this.state;
-        let bonusLength = 0;
-        Object.keys(rest).map(item=>{
-            rest[item] && bonusLength++;
-        });
-        const numberOfFields = (columns.length - 1 + bonusLength) * rowsToSelect.length;
-        return (
-            <ThemeProvider theme={theme}>
-                <Switch>
-                    <Route
-                        exact path='/'
-                        render={props=>
-                            <Main
-                                {...props}
-                                columns={columns}
-                                columnsToAdd={rest}
-                                numberOfColumns={columns.length-1+bonusLength}
-                                numberOfDice={numberOfDice}
-                                numberOfFields={numberOfFields}
-                            />}
-                    />
-                    <Route
-                        path='/settings'
-                        render={props=>
-                            <Settings
-                                {...props}
-                                columnsToAdd={rest}
-                                numberOfDice={numberOfDice}
-                                handleChange={this.handleChange}
-                            />}
-                    />
-                    <Route
-                        path='/toplists'
-                        render={props=>
-                            <TopList
-                                {...props}
-                                numberOfColumns={columns.length-1+bonusLength}
-                                columnsToAdd={rest}
-                                numberOfDice={numberOfDice}
-                            />}
-                    />
-                </Switch>
-            </ThemeProvider>
-        );
-    }
+    this.state = {
+      numberOfDice: dataSettings['numberOfDice'] || '6'
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  componentDidMount() {
+    const rest = dataSettings['columnsToAdd'];
+    this.setState({ ...rest });
+    setExtraColumns({ ...rest });
+  }
+  handleChange(e) {
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
+  }
+  render() {
+    const { numberOfDice, ...rest } = this.state;
+    let bonusLength = 0;
+    Object.keys(rest).map(item => {
+      rest[item] && bonusLength++;
+    });
+    const numberOfFields =
+      (columns.length - 1 + bonusLength) * rowsToSelect.length;
+    return (
+      <ThemeProvider theme={theme}>
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={props => (
+              <Main
+                {...props}
+                columns={columns}
+                columnsToAdd={rest}
+                numberOfColumns={columns.length - 1 + bonusLength}
+                numberOfDice={numberOfDice}
+                numberOfFields={numberOfFields}
+              />
+            )}
+          />
+          <Route
+            path="/settings"
+            render={props => (
+              <Settings
+                {...props}
+                columnsToAdd={rest}
+                numberOfDice={numberOfDice}
+                handleChange={this.handleChange}
+              />
+            )}
+          />
+          <Route
+            path="/toplists"
+            render={props => (
+              <TopList
+                {...props}
+                numberOfColumns={columns.length - 1 + bonusLength}
+                columnsToAdd={rest}
+                numberOfDice={numberOfDice}
+              />
+            )}
+          />
+        </Switch>
+      </ThemeProvider>
+    );
+  }
 }
 
 injectGlobal`

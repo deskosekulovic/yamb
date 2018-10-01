@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const StyledTopList = styled.div`
   text-align: center;
-  background-color: ${(props) => props.theme.gameBackground};
+  background-color: ${props => props.theme.gameBackground};
 `;
 export const StyledTopListSettings = styled.div`
   position: absolute;
@@ -10,7 +10,7 @@ export const StyledTopListSettings = styled.div`
 `;
 
 export const Settings = styled.div`
-  background: ${(props) => props.theme.backgroundColor};
+  background: ${props => props.theme.backgroundColor};
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
@@ -27,11 +27,12 @@ export const StyledDisplayTopList = styled.div`
 export const Table = styled.table`
   border-collapse: collapse;
   margin: 20px auto;
-  th, td {
-    border: ${(props) => props.theme.border};
+  th,
+  td {
+    border: ${props => props.theme.border};
     border-collapse: collapse;
     padding: 10px;
-    background-color: ${(props) => props.theme.color};
+    background-color: ${props => props.theme.color};
   }
 `;
 

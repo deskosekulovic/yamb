@@ -12,18 +12,18 @@ const slideIn = keyframes`
 `;
 
 const ComponentAnimation = styled.div`
-	background: grey;
-	position: relative;
-	padding: 10px;
+  background: grey;
+  position: relative;
+  padding: 10px;
   animation-name: ${slideIn};
   animation-duration: 500ms;
   animation-timing-function: ease;
-	form{
-		padding: 10px;
-		label{
-			padding-right: 10px;
-		}
-	}
+  form {
+    padding: 10px;
+    label {
+      padding-right: 10px;
+    }
+  }
 `;
 
 export default ComponentAnimation;

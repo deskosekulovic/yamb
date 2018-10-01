@@ -4,16 +4,19 @@ export const StyledSettings = styled.div`
   display: grid;
   grid-template-columns: 1fr 480px 1fr;
   grid-row-gap: 1em;
-  h1,div,a{
+  h1,
+  div,
+  a {
     grid-column: 2/3;
     display: grid;
     justify-content: center;
     text-decoration: none;
-    h2,select{
+    h2,
+    select {
       justify-self: center;
     }
   }
-  background-color: ${(props) => props.theme.backgroundColor};
+  background-color: ${props => props.theme.backgroundColor};
   padding: 20px 0;
 `;
 
