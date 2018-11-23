@@ -1,6 +1,8 @@
-# React Webpack Starter
+## App Info
 
-> This is a boilerplate for React 16 & Webpack 4. It includes webpack-dev-server and a build script
+Progressive app with settings to change number of dice and columns to play, and top lists for all settings.
+Settings are saved in local storage so you can have your favorite settings everytime you start new game.
+Top results are also stored in storage.
 
 ## Quick Start
 
@@ -15,7 +17,9 @@ npm start
 npm run build
 ```
 
-## App Info
+## Technologies
+
+react, react router 4, styled components, webpack, service workers
 
 ### Author
 
