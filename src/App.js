@@ -9,21 +9,24 @@ import { setExtraColumns } from './utilities/Functions';
 import { getDataSettings } from './utilities/store';
 import { columns, rowsToSelect } from './utilities/Fields';
 
-const dataSettings = getDataSettings('dataSettings');
-
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      numberOfDice: dataSettings['numberOfDice'] || '6'
+      numberOfDice: '6'
     };
     this.handleChange = this.handleChange.bind(this);
   }
   componentDidMount() {
-    const rest = dataSettings['columnsToAdd'];
-    this.setState({ ...rest });
-    setExtraColumns({ ...rest });
+    const dataSettings = getDataSettings('dataSettings');
+    const columnsToAdd = dataSettings['columnsToAdd'];
+    const numberOfDice =
+      dataSettings['numberOfDice'] || this.state.numberOfDice;
+    this.setState({
+      numberOfDice,
+      ...columnsToAdd
+    });
+    setExtraColumns({ ...columnsToAdd });
   }
   handleChange(e) {
     const target = e.target;

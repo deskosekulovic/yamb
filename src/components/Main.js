@@ -34,7 +34,6 @@ class Main extends Component {
   }
   componentDidMount() {
     this.resetGame();
-    window.scrollTo(0, 0);
   }
   componentDidUpdate(prevProps, prevState) {
     const { rollCounter, najavljeno, inputCount } = this.state;

@@ -10,17 +10,26 @@ import { saveTopListSettings, getDataSettings } from '../utilities/store';
 class TopList extends Component {
   constructor(props) {
     super(props);
-    const dataSettings = getDataSettings('topListSettings');
     this.state = {
-      localNumberOfDice: dataSettings['localNumberOfDice'] || '6',
-      localNumberOfColumns: dataSettings['localNumberOfColumns'] || '7',
-      numberOfResults: dataSettings['numberOfResults'] || '10',
+      localNumberOfDice: '6',
+      localNumberOfColumns: '7',
+      numberOfResults: '10',
       showTopListSettings: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.toggleTopListSettings = this.toggleTopListSettings.bind(this);
   }
-
+  componentDidMount() {
+    const dataSettings = getDataSettings('topListSettings');
+    const localNumberOfDice =
+      dataSettings['localNumberOfDice'] || this.state.localNumberOfDice;
+    const localNumberOfColumns =
+      dataSettings['localNumberOfColumns'] || this.state.localNumberOfColumns;
+    this.setState({
+      localNumberOfDice,
+      localNumberOfColumns
+    });
+  }
   handleChange(e) {
     const target = e.target;
     const name = target.name;
